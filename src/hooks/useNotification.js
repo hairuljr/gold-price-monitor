@@ -26,33 +26,42 @@ export function useNotification() {
         }
     }, []);
 
-    const sendNotification = useCallback((title, options = {}) => {
+    const sendNotification = useCallback(async (title, options = {}) => {
         if (permission !== 'granted') {
             console.warn('Notification permission not granted');
             return null;
         }
 
-        try {
-            const notification = new Notification(title, {
-                icon: '/gold-icon.svg',
-                badge: '/gold-icon.svg',
-                tag: 'treasury-gold-alert',
-                requireInteraction: true,
-                ...options,
-            });
+        const notificationOptions = {
+            icon: '/icon-192.png', // Use PNG for better compatibility
+            badge: '/gold-icon.svg',
+            tag: 'treasury-gold-alert',
+            requireInteraction: true,
+            vibrate: [200, 100, 200], // Add vibration for mobile
+            ...options,
+        };
 
-            // Play sound if available
+        try {
+            // Play sound (attempt before notification)
             try {
                 const audio = new Audio('/notification-sound.mp3');
                 audio.volume = 0.5;
-                audio.play().catch(() => {
-                    // Sound might be blocked by browser
-                });
-            } catch {
-                // Audio not available
+                audio.play().catch(() => { });
+            } catch (e) {
+                // Ignore audio errors
             }
 
-            return notification;
+            // Try Service Worker first (Required for Android Chrome)
+            if ('serviceWorker' in navigator) {
+                const registration = await navigator.serviceWorker.ready;
+                if (registration) {
+                    await registration.showNotification(title, notificationOptions);
+                    return true;
+                }
+            }
+
+            // Fallback to classic Web Notification API (Desktop)
+            return new Notification(title, notificationOptions);
         } catch (err) {
             console.error('Failed to create notification:', err);
             return null;
