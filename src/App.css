@@ -33,6 +33,18 @@ body {
   align-items: center;
   padding: 2rem 5%;
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 1rem;
+  }
+
+  .app-header {
+    margin-bottom: 1.5rem;
+  }
 }
 
 /* Header */

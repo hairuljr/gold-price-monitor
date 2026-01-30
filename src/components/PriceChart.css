@@ -6,6 +6,15 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 2rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    /* Ensure padding includes in width */
+}
+
+@media (max-width: 480px) {
+    .price-chart-container {
+        padding: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
 }
 
 .chart-loading,
