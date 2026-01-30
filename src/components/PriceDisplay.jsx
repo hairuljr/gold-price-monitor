@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { formatPrice } from '../utils/formatPrice';
 import './PriceDisplay.css';
+import PriceSkeleton from './PriceSkeleton';
 
 function PriceDisplay({ priceData, isConnected }) {
     const { buyingRate, sellingRate, lastUpdated } = priceData;
@@ -25,21 +26,25 @@ function PriceDisplay({ priceData, isConnected }) {
             </div>
 
             <div className="price-cards">
-                <div className="price-card buy">
-                    <div className="price-label">Harga Beli</div>
-                    <div className="price-value">
-                        {buyingRate ? formatPrice(buyingRate) : '-'}
+                {buyingRate ? (
+                    <div className="price-card buy">
+                        <div className="price-label">Harga Beli</div>
+                        <div className="price-value">{formatPrice(buyingRate)}</div>
+                        <div className="price-unit">per gram</div>
                     </div>
-                    <div className="price-unit">per gram</div>
-                </div>
+                ) : (
+                    <PriceSkeleton />
+                )}
 
-                <div className="price-card sell">
-                    <div className="price-label">Harga Jual</div>
-                    <div className="price-value">
-                        {sellingRate ? formatPrice(sellingRate) : '-'}
+                {sellingRate ? (
+                    <div className="price-card sell">
+                        <div className="price-label">Harga Jual</div>
+                        <div className="price-value">{formatPrice(sellingRate)}</div>
+                        <div className="price-unit">per gram</div>
                     </div>
-                    <div className="price-unit">per gram</div>
-                </div>
+                ) : (
+                    <PriceSkeleton />
+                )}
             </div>
 
             {lastUpdated && (
