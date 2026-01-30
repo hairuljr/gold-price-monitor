@@ -34,6 +34,22 @@ export default defineConfig({
           }
         ],
         categories: ['finance', 'business'],
+        screenshots: [
+          {
+            src: '/screenshot-mobile.png',
+            sizes: '1170x2532',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Gold Price Monitor Mobile'
+          },
+          {
+            src: '/screenshot-desktop.png',
+            sizes: '1920x1080',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Gold Price Monitor Desktop'
+          }
+        ],
         lang: 'id',
         dir: 'ltr'
       },
