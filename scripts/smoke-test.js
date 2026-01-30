@@ -12,7 +12,8 @@ const requiredFiles = [
     'gold-icon.svg',
     'robots.txt',
     'icon-192.png',
-    'icon-512.png'
+    'icon-512.png',
+    'notification-sound.mp3'
 ];
 
 let failed = false;

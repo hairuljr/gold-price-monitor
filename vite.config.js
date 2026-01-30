@@ -9,7 +9,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['gold-icon.svg', 'robots.txt'],
+      includeAssets: ['gold-icon.svg', 'robots.txt', 'notification-sound.mp3'],
       manifest: {
         name: 'Gold Price Monitor',
         short_name: 'GoldMonitor',
