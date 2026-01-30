@@ -32,13 +32,12 @@ export function useHistoricalPrices(timeframe) {
                         startDate = subDays(now, 1);
                 }
 
-                // Format dates for API (YYYY-MM-DD HH:mm:ss)
                 const formatDateForApi = (date) => format(date, 'yyyy-MM-dd HH:mm:ss');
 
                 const payload = {
                     start_date: formatDateForApi(startDate),
                     end_date: formatDateForApi(now),
-                    type: 'daily', // API uses 'daily' but returns granular data based on range
+                    type: 'daily',
                     region: 'id',
                     assetType: 'gold'
                 };
@@ -56,25 +55,15 @@ export function useHistoricalPrices(timeframe) {
                 }
 
                 const result = await response.json();
+
+                // The API actually returns prices in result.data.attributes.prices
                 const prices = result?.data?.attributes?.prices || [];
 
-                // Format data for Recharts
-                // The API returns datetime like "30/01/26 - 17:00"
-                const formattedData = prices.map(item => {
-                    // Parse custom date format from API if needed, but for now let's trust the order
-                    // Or simpler: just use the string as label if it's display-ready.
-                    // However, to be safe with charts, let's parse.
-                    // API format: DD/MM/YY - HH:mm
-                    // Let's just keep the raw object for now and format in the chart component
-                    // to allow flexible X-axis formatting based on timeframe
-                    return {
-                        timestamp: item.datetime,
-                        buy: item.buy_price,
-                        sell: item.sell_price,
-                        // Create a sortable date object if needed for sorting
-                        // _dateObj: parse(item.datetime, 'dd/MM/yy - HH:mm', new Date()) 
-                    };
-                });
+                const formattedData = prices.map(item => ({
+                    timestamp: item.datetime,
+                    buy: item.buy_price,
+                    sell: item.sell_price
+                }));
 
                 setData(formattedData);
             } catch (err) {

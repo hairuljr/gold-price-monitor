@@ -1,15 +1,15 @@
 import Pusher from 'pusher-js';
 import { useEffect, useState, useRef } from 'react';
 
-const PUSHER_APP_KEY = import.meta.env.VITE_PUSHER_APP_KEY;
-const PUSHER_CLUSTER = import.meta.env.VITE_PUSHER_CLUSTER;
-const CHANNEL_NAME = import.meta.env.VITE_CHANNEL_NAME;
-const EVENT_NAME = import.meta.env.VITE_EVENT_NAME;
-
 const MAX_RETRIES = 3;
 const BASE_RETRY_DELAY = 2000; // 2 seconds
 
 export function usePusher() {
+  const PUSHER_APP_KEY = import.meta.env.VITE_PUSHER_APP_KEY;
+  const PUSHER_CLUSTER = import.meta.env.VITE_PUSHER_CLUSTER;
+  const CHANNEL_NAME = import.meta.env.VITE_CHANNEL_NAME || 'gold-rate';
+  const EVENT_NAME = import.meta.env.VITE_EVENT_NAME || 'gold-rate-event';
+
   const [priceData, setPriceData] = useState({
     buyingRate: null,
     sellingRate: null,
