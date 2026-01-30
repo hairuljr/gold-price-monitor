@@ -2,8 +2,11 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import usePusher from './hooks/usePusher';
 import useNotification from './hooks/useNotification';
+import { useHistoricalPrices } from './hooks/useHistoricalPrices';
 import PriceDisplay from './components/PriceDisplay';
 import AlertSettings from './components/AlertSettings';
+import TimeframeSelector from './components/TimeframeSelector';
+import PriceChart from './components/PriceChart';
 import { formatPrice } from './utils/formatPrice';
 import './App.css';
 
@@ -11,6 +14,10 @@ function AppContent() {
   const { priceData, isConnected, error } = usePusher();
   const { permission, requestPermission, sendNotification } = useNotification();
   const [alerts, setAlerts] = useState(null);
+
+  // Chart state
+  const [timeframe, setTimeframe] = useState('1D');
+  const { data: chartData, loading: chartLoading, error: chartError } = useHistoricalPrices(timeframe);
 
   // Track last notification time to avoid spamming
   const lastNotificationRef = useRef({
@@ -82,6 +89,16 @@ function AppContent() {
           priceData={priceData}
           isConnected={isConnected}
         />
+
+        <div className="chart-section" style={{ width: '100%', marginBottom: '2rem' }}>
+          <TimeframeSelector selected={timeframe} onChange={setTimeframe} />
+          <PriceChart
+            data={chartData}
+            loading={chartLoading}
+            error={chartError}
+            timeframe={timeframe}
+          />
+        </div>
 
         <AlertSettings
           currentBuyPrice={priceData.buyingRate}
