@@ -19,6 +19,7 @@ The default values in `.env.example` should work, but you can customize:
 - `VITE_PUSHER_CLUSTER` - Pusher cluster (default: ap1)
 - `VITE_CHANNEL_NAME` - Pusher channel name
 - `VITE_EVENT_NAME` - Pusher event name
+- `VITE_TREASURY_API_URL` - Treasury price API endpoint
 
 ## Local Development
 
@@ -103,12 +104,12 @@ npx gh-pages -d dist
 
 ## PWA App Icons
 
-Icons need to be created manually. Create two PNG files:
+Icons are already included in the `/public` folder:
 
-- `/public/icon-192.png` - 192x192 pixels
-- `/public/icon-512.png` - 512x512 pixels
+- `/public/icon-192.png` - 192x192 pixels (PNG)
+- `/public/icon-512.png` - 512x512 pixels (PNG)
 
-Recommended: Use a gold coin or gold bar symbol with dark gradient background (#1a1a2e).
+These were generated using a gold coin theme with a dark gradient background (#1a1a2e) to match the application aesthetic.
 
 ## Performance Optimization
 
