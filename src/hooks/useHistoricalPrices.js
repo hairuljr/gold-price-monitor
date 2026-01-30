@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { subDays, subMonths, format } from 'date-fns';
 
-const API_ENDPOINT = 'https://webv2-api.treasury.id/api/v1/external/wp/gold/price';
+const API_ENDPOINT = import.meta.env.VITE_TREASURY_API_URL || 'https://webv2-api.treasury.id/api/v1/external/wp/gold/price';
 
 export function useHistoricalPrices(timeframe) {
     const [data, setData] = useState([]);

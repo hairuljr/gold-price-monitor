@@ -1,10 +1,10 @@
 import Pusher from 'pusher-js';
 import { useEffect, useState, useRef } from 'react';
 
-const PUSHER_APP_KEY = import.meta.env.VITE_PUSHER_APP_KEY || '52e99bd2c3c42e577e13';
-const PUSHER_CLUSTER = import.meta.env.VITE_PUSHER_CLUSTER || 'ap1';
-const CHANNEL_NAME = import.meta.env.VITE_CHANNEL_NAME || 'gold-rate';
-const EVENT_NAME = import.meta.env.VITE_EVENT_NAME || 'gold-rate-event';
+const PUSHER_APP_KEY = import.meta.env.VITE_PUSHER_APP_KEY;
+const PUSHER_CLUSTER = import.meta.env.VITE_PUSHER_CLUSTER;
+const CHANNEL_NAME = import.meta.env.VITE_CHANNEL_NAME;
+const EVENT_NAME = import.meta.env.VITE_EVENT_NAME;
 
 const MAX_RETRIES = 3;
 const BASE_RETRY_DELAY = 2000; // 2 seconds
@@ -95,7 +95,16 @@ export function usePusher() {
       }
       if (pusherRef.current) {
         pusherRef.current.unsubscribe(CHANNEL_NAME);
-        pusherRef.current.disconnect();
+
+        // Safely disconnect
+        try {
+          const state = pusherRef.current.connection.state;
+          if (state !== 'disconnected' && state !== 'failed') {
+            pusherRef.current.disconnect();
+          }
+        } catch (e) {
+          // Ignore disconnect errors (common in strict mode)
+        }
       }
     };
   }, []);

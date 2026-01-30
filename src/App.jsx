@@ -27,23 +27,36 @@ function AppContent() {
 
   const NOTIFICATION_COOLDOWN = 60000; // 1 minute cooldown between same type notifications
 
+  // Debounce alerts to prevent triggering while typing
+  const [debouncedAlerts, setDebouncedAlerts] = useState(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedAlerts(alerts);
+    }, 1500); // Wait 1.5s after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [alerts]);
+
   // Check alerts and trigger notifications
   useEffect(() => {
-    if (!alerts || !priceData.buyingRate || !priceData.sellingRate) {
+    if (!debouncedAlerts || !priceData.buyingRate || !priceData.sellingRate) {
       return;
     }
 
     const now = Date.now();
 
     // Check buy alert (price dropped to target)
+    // Validate target is defined and reasonable (> 1000) to avoid false triggers
     if (
-      alerts.buyEnabled &&
-      alerts.buyTarget &&
-      priceData.buyingRate <= alerts.buyTarget &&
+      debouncedAlerts.buyEnabled &&
+      debouncedAlerts.buyTarget &&
+      debouncedAlerts.buyTarget > 1000 &&
+      priceData.buyingRate <= debouncedAlerts.buyTarget &&
       now - lastNotificationRef.current.buy > NOTIFICATION_COOLDOWN
     ) {
       sendNotification('📉 Harga Emas Turun!', {
-        body: `Harga beli sekarang ${formatPrice(priceData.buyingRate)}/gram\nTarget Anda: ${formatPrice(alerts.buyTarget)}`,
+        body: `Harga beli sekarang ${formatPrice(priceData.buyingRate)}/gram\nTarget Anda: ${formatPrice(debouncedAlerts.buyTarget)}`,
         tag: 'treasury-buy-alert',
       });
       lastNotificationRef.current.buy = now;
@@ -51,18 +64,19 @@ function AppContent() {
 
     // Check sell alert (price rose to target)
     if (
-      alerts.sellEnabled &&
-      alerts.sellTarget &&
-      priceData.sellingRate >= alerts.sellTarget &&
+      debouncedAlerts.sellEnabled &&
+      debouncedAlerts.sellTarget &&
+      debouncedAlerts.sellTarget > 1000 &&
+      priceData.sellingRate >= debouncedAlerts.sellTarget &&
       now - lastNotificationRef.current.sell > NOTIFICATION_COOLDOWN
     ) {
       sendNotification('📈 Harga Emas Naik!', {
-        body: `Harga jual sekarang ${formatPrice(priceData.sellingRate)}/gram\nTarget Anda: ${formatPrice(alerts.sellTarget)}`,
+        body: `Harga jual sekarang ${formatPrice(priceData.sellingRate)}/gram\nTarget Anda: ${formatPrice(debouncedAlerts.sellTarget)}`,
         tag: 'treasury-sell-alert',
       });
       lastNotificationRef.current.sell = now;
     }
-  }, [priceData, alerts, sendNotification]);
+  }, [priceData, debouncedAlerts, sendNotification]);
 
   const handleAlertChange = useCallback((newAlerts) => {
     setAlerts(newAlerts);
