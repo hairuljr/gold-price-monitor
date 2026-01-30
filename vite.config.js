@@ -1,9 +1,48 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+import { VitePWA } from 'vite-plugin-pwa'
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['gold-icon.svg', 'robots.txt'],
+      manifest: {
+        name: 'Gold Price Monitor',
+        short_name: 'GoldMonitor',
+        description: 'Monitor harga emas Treasury.id secara real-time dengan notifikasi otomatis',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#0f0f1a',
+        theme_color: '#1a1a2e',
+        orientation: 'portrait-primary',
+        icons: [
+          {
+            src: '/icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
+            src: '/icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
+        ],
+        categories: ['finance', 'business'],
+        lang: 'id',
+        dir: 'ltr'
+      },
+      workbox: {
+        // Define runtime caching for API if needed, 
+        // but default is usually fine for App Shell
+      }
+    })
+  ],
   test: {
     globals: true,
     environment: 'jsdom',

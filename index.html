@@ -42,8 +42,7 @@
     content="Monitor harga emas Treasury.id secara real-time dengan notifikasi otomatis." />
   <meta property="twitter:image" content="/og-image.png" />
 
-  <!-- Manifest for PWA -->
-  <link rel="manifest" href="/manifest.json" />
+  <!-- Manifest for PWA is injected by vite-plugin-pwa -->
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -72,19 +71,6 @@
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(registration => {
-            console.log('ServiceWorker registration successful');
-          })
-          .catch(err => {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-      });
-    }
-  </script>
 </body>
 
 </html>
