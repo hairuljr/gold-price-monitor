@@ -1,14 +1,10 @@
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { formatPrice } from '../utils/formatPrice';
+import ChartSkeleton from './ChartSkeleton';
 
 const PriceChart = ({ data, loading, error, timeframe }) => {
     if (loading) {
-        return (
-            <div className="chart-loading">
-                <div className="loading-spinner"></div>
-                <p>Memuat grafik harga...</p>
-            </div>
-        );
+        return <ChartSkeleton />;
     }
 
     if (error) {
