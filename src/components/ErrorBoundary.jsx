@@ -36,9 +36,9 @@ class ErrorBoundary extends Component {
                             We encountered an unexpected error. Please try refreshing the page.
                         </p>
 
-                        {process.env.NODE_ENV === 'development' && this.state.error && (
+                        {this.state.error && (
                             <details className="error-details">
-                                <summary>Error Details (Development Only)</summary>
+                                <summary>Error Details</summary>
                                 <pre className="error-stack">
                                     {this.state.error.toString()}
                                     {this.state.errorInfo?.componentStack}

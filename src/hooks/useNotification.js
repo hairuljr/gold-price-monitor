@@ -32,26 +32,31 @@ export function useNotification() {
             return null;
         }
 
-        const notification = new Notification(title, {
-            icon: '/gold-icon.svg',
-            badge: '/gold-icon.svg',
-            tag: 'treasury-gold-alert',
-            requireInteraction: true,
-            ...options,
-        });
-
-        // Play sound if available
         try {
-            const audio = new Audio('/notification-sound.mp3');
-            audio.volume = 0.5;
-            audio.play().catch(() => {
-                // Sound might be blocked by browser
+            const notification = new Notification(title, {
+                icon: '/gold-icon.svg',
+                badge: '/gold-icon.svg',
+                tag: 'treasury-gold-alert',
+                requireInteraction: true,
+                ...options,
             });
-        } catch {
-            // Audio not available
-        }
 
-        return notification;
+            // Play sound if available
+            try {
+                const audio = new Audio('/notification-sound.mp3');
+                audio.volume = 0.5;
+                audio.play().catch(() => {
+                    // Sound might be blocked by browser
+                });
+            } catch {
+                // Audio not available
+            }
+
+            return notification;
+        } catch (err) {
+            console.error('Failed to create notification:', err);
+            return null;
+        }
     }, [permission]);
 
     return {
