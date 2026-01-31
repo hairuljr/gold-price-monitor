@@ -134,6 +134,52 @@ body {
   color: rgba(255, 255, 255, 0.3);
 }
 
+.author-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.author-name {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.75rem;
+}
+
+.author-name strong {
+  color: #fbbf24;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  transform: translateY(-3px);
+  text-decoration: none;
+}
+
+.social-links svg {
+  width: 20px;
+  height: 20px;
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;

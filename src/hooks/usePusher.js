@@ -88,8 +88,27 @@ export function usePusher() {
 
     connectPusher();
 
+    // Reconnect when app returns to foreground (visibility change)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // Check if Pusher is disconnected and reconnect
+        if (pusherRef.current) {
+          const state = pusherRef.current.connection.state;
+          if (state === 'disconnected' || state === 'failed' || state === 'unavailable') {
+            console.log('App resumed, reconnecting Pusher...');
+            retryCountRef.current = 0;
+            pusherRef.current.disconnect();
+            connectPusher();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     // Cleanup
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (retryTimeoutRef.current) {
         clearTimeout(retryTimeoutRef.current);
       }
